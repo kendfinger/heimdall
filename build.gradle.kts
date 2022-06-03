@@ -1,12 +1,18 @@
-import io.kexec.heimdall.gradle.HeimdallProjectPlugin
 import org.jetbrains.kotlin.gradle.tasks.KotlinCompile
 
 plugins {
   java
+
+  kotlin("jvm")
+  kotlin("plugin.serialization")
+
   id("io.kexec.heimdall.gradle")
+  id("com.github.johnrengelman.shadow")
 }
 
-allprojects {
+group = "io.kexec"
+version = "0.1"
+
   repositories {
     mavenCentral()
     maven {
@@ -19,19 +25,6 @@ allprojects {
       url = uri("https://oss.sonatype.org/content/groups/public/")
     }
   }
-}
-
-tasks.assemble {
-  dependsOn("updateManifests")
-}
-
-plugins.apply("org.jetbrains.kotlin.jvm")
-plugins.apply("org.jetbrains.kotlin.plugin.serialization")
-plugins.apply("com.github.johnrengelman.shadow")
-plugins.apply(HeimdallProjectPlugin::class)
-
-group = "io.kexec"
-version = "0.1"
 
 dependencies {
   // Kotlin dependencies
@@ -56,6 +49,12 @@ java {
   val javaVersion = JavaVersion.toVersion(17)
   sourceCompatibility = javaVersion
   targetCompatibility = javaVersion
+}
+
+tasks.jar {
+  manifest.attributes(
+    "Main-Class" to "io.kexec.heimdall.tool.MainKt"
+  )
 }
 
 tasks.withType<KotlinCompile> {
