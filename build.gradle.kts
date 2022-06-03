@@ -13,18 +13,18 @@ plugins {
 group = "io.kexec"
 version = "0.1"
 
-  repositories {
-    mavenCentral()
-    maven {
-      name = "papermc"
-      url = uri("https://papermc.io/repo/repository/maven-public/")
-    }
-
-    maven {
-      name = "sonatype"
-      url = uri("https://oss.sonatype.org/content/groups/public/")
-    }
+repositories {
+  mavenCentral()
+  maven {
+    name = "papermc"
+    url = uri("https://papermc.io/repo/repository/maven-public/")
   }
+
+  maven {
+    name = "sonatype"
+    url = uri("https://oss.sonatype.org/content/groups/public/")
+  }
+}
 
 dependencies {
   // Kotlin dependencies

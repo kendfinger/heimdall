@@ -14,10 +14,10 @@ class GjallarhornCommand : CliktCommand(invokeWithoutSubcommand = true) {
     .default("jdbc:postgresql://localhost/heimdall")
 
   private val jdbcConnectionUsername by option("-u", "--connection-username", help = "JDBC Connection Username")
-    .default("jdbc:postgresql://localhost/heimdall")
+    .default("heimdall")
 
   private val jdbcConnectionPassword by option("-p", "--connection-password", help = "JDBC Connection Password")
-    .default("jdbc:postgresql://localhost/heimdall")
+    .default("heimdall")
 
   private val dbPoolSize by option("--db-pool-size", help = "JDBC Pool Size").int().default(8)
 
