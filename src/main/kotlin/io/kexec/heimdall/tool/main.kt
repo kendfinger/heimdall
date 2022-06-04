@@ -6,7 +6,7 @@ import io.kexec.heimdall.tool.commands.PlayerPositionExport
 import io.kexec.heimdall.tool.commands.PlayerSessionExport
 import com.github.ajalt.clikt.core.subcommands
 
-fun main(args: Array<String>) = io.kexec.heimdall.tool.GjallarhornCommand().subcommands(
+fun main(args: Array<String>) = GjallarhornCommand().subcommands(
   BlockChangeTimelapseCommand(),
   PlayerSessionExport(),
   PlayerPositionExport(),

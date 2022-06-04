@@ -43,6 +43,8 @@ dependencies {
   implementation("com.zaxxer:HikariCP:5.0.1")
 
   implementation("com.github.ajalt.clikt:clikt:3.4.2")
+
+  implementation("org.slf4j:slf4j-simple:1.7.36")
 }
 
 java {

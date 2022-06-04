@@ -4,7 +4,7 @@ create extension if not exists timescaledb;
 --
 create schema if not exists heimdall;
 --
-create table if not exists heimdall.player_positions (
+create table if not exists player_positions (
     time timestamp not null,
     player uuid not null,
     world uuid not null,
@@ -16,17 +16,17 @@ create table if not exists heimdall.player_positions (
     PRIMARY KEY (time, player, world)
 );
 --
-select create_hypertable('heimdall.player_positions', 'time', 'player', 4,  if_not_exists => TRUE);
+select create_hypertable('player_positions', 'time', 'player', 4,  if_not_exists => TRUE);
 --
-alter table heimdall.player_positions set (
+alter table player_positions set (
     timescaledb.compress,
     timescaledb.compress_segmentby = 'player,world',
     timescaledb.compress_orderby = 'time'
 );
 --
-select add_compression_policy('heimdall.player_positions', interval '3 days', if_not_exists => true);
+select add_compression_policy('player_positions', interval '3 days', if_not_exists => true);
 --
-create table if not exists heimdall.block_breaks (
+create table if not exists block_breaks (
     time timestamp not null,
     player uuid not null,
     world uuid not null,
@@ -39,9 +39,9 @@ create table if not exists heimdall.block_breaks (
     PRIMARY KEY (time, player, world)
 );
 --
-select create_hypertable('heimdall.block_breaks', 'time', 'player', 4,  if_not_exists => TRUE);
+select create_hypertable('block_breaks', 'time', 'player', 4,  if_not_exists => TRUE);
 --
-create table if not exists heimdall.block_places (
+create table if not exists block_places (
     time timestamp not null,
     player uuid not null,
     world uuid not null,
@@ -54,9 +54,9 @@ create table if not exists heimdall.block_places (
     PRIMARY KEY (time, player, world)
 );
 --
-select create_hypertable('heimdall.block_places', 'time', 'player', 4,  if_not_exists => TRUE);
+select create_hypertable('block_places', 'time', 'player', 4,  if_not_exists => TRUE);
 --
-create table if not exists heimdall.player_sessions (
+create table if not exists player_sessions (
     id uuid not null,
     player uuid not null,
     name text not null,
@@ -65,9 +65,9 @@ create table if not exists heimdall.player_sessions (
     primary key (id, player, start)
 );
 --
-select create_hypertable('heimdall.player_sessions', 'start', 'player', 4,  if_not_exists => TRUE);
+select create_hypertable('player_sessions', 'start', 'player', 4,  if_not_exists => TRUE);
 --
-create table if not exists heimdall.world_changes (
+create table if not exists world_changes (
     time timestamp not null,
     player uuid not null,
     from_world uuid not null,
@@ -77,9 +77,9 @@ create table if not exists heimdall.world_changes (
     primary key (time, player)
 );
 --
-select create_hypertable('heimdall.world_changes', 'time', 'player', 4,  if_not_exists => TRUE);
+select create_hypertable('world_changes', 'time', 'player', 4,  if_not_exists => TRUE);
 --
-create table if not exists heimdall.player_deaths (
+create table if not exists player_deaths (
     time timestamp not null,
     player uuid not null,
     world uuid not null,
@@ -93,9 +93,9 @@ create table if not exists heimdall.player_deaths (
     primary key (time, player)
 );
 --
-select create_hypertable('heimdall.player_deaths', 'time', 'player', 4,  if_not_exists => TRUE);
+select create_hypertable('player_deaths', 'time', 'player', 4,  if_not_exists => TRUE);
 --
-create table if not exists heimdall.player_advancements (
+create table if not exists player_advancements (
     time timestamp not null,
     player uuid not null,
     world uuid not null,
@@ -108,9 +108,9 @@ create table if not exists heimdall.player_advancements (
     primary key (time, player, advancement)
 );
 --
-select create_hypertable('heimdall.player_advancements', 'time', 'player', 4,  if_not_exists => TRUE);
+select create_hypertable('player_advancements', 'time', 'player', 4,  if_not_exists => TRUE);
 --
-create table if not exists heimdall.entity_kills (
+create table if not exists entity_kills (
     time timestamp not null,
     player uuid not null,
     entity uuid not null,
@@ -124,22 +124,22 @@ create table if not exists heimdall.entity_kills (
     primary key (time, entity, player)
 );
 --
-select create_hypertable('heimdall.entity_kills', 'time', 'player', 4,  if_not_exists => TRUE);
+select create_hypertable('entity_kills', 'time', 'player', 4,  if_not_exists => TRUE);
 --
-create or replace view heimdall.block_changes as
+create or replace view block_changes as
     select true as break, *
-    from heimdall.block_breaks
+    from block_breaks
     union all
-    select false as break, * from heimdall.block_places;
+    select false as break, * from block_places;
 --
-create or replace view heimdall.player_names as
+create or replace view player_names as
     with unique_player_ids as (
         select distinct player
-        from heimdall.player_sessions
+        from player_sessions
     )
     select player, (
         select name
-        from heimdall.player_sessions
+        from player_sessions
         where player = unique_player_ids.player
         order by "end" desc
         limit 1

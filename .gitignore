@@ -119,3 +119,6 @@ run/
 
 # Heimdall Server
 /server
+
+# Heimdall Render
+/render

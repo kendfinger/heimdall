@@ -2,14 +2,14 @@ WITH
     unique_player_ids AS (
         SELECT
             DISTINCT player
-        FROM heimdall.player_sessions
+        FROM player_sessions
     ),
     player_names AS (
         SELECT
                player,
                (
                    SELECT name
-                   FROM heimdall.player_sessions
+                   FROM player_sessions
                    WHERE player = unique_player_ids.player
                    ORDER BY "end" DESC
                    LIMIT 1
@@ -19,15 +19,15 @@ WITH
     unique_world_ids AS (
       SELECT
         DISTINCT to_world AS world
-        FROM heimdall.world_changes
+        FROM world_changes
     ),
     world_names AS (
         SELECT
             world,
                (
                    SELECT to_world_name
-                   FROM heimdall.world_changes
-                   WHERE world = heimdall.world_changes.to_world
+                   FROM world_changes
+                   WHERE world = world_changes.to_world
                    ORDER BY time DESC
                    LIMIT 1
                 ) AS name
@@ -50,7 +50,7 @@ WITH
                MODE() WITHIN GROUP (ORDER BY x) AS mode_x,
                MODE() WITHIN GROUP (ORDER BY y) AS mode_y,
                MODE() WITHIN GROUP (ORDER BY z) AS mode_z
-        FROM heimdall.player_positions
+        FROM player_positions
         GROUP BY player, world
     )
 SELECT
